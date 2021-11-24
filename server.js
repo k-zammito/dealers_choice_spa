@@ -4,6 +4,8 @@ const app = express();
 const chalk = require('chalk')
 const path = require('path')
 
+app.use('/dist', express.static(path.join(__dirname, 'dist'))); // adds static route for webpack
+
 app.get('/', (req, res, next) => res.sendFile(path.join(__dirname, 'index.html')))
 
 app.use('/', express.static(path.join(__dirname, 'public'))); // need to add photos / css public folder
