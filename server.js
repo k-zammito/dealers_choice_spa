@@ -4,7 +4,11 @@ const app = express();
 const chalk = require('chalk')
 const path = require('path')
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res, next) => res.sendFile(path.join(__dirname, 'index.html')))
+
+app.use('/', express.static(path.join(__dirname, 'public'))); // need to add photos / css public folder
+
+app.use('/api', require('./api'))
 
 app.get('/', async(req, res, next) => { // display on browser, json data
     try {
@@ -16,7 +20,7 @@ app.get('/', async(req, res, next) => { // display on browser, json data
                         required: true
                     },
                     {
-                        model: Character,
+                        model: Character, 
                         as: 'companion',
                         required: true
                     }
