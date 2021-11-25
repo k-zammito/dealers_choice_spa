@@ -1,4 +1,4 @@
-const { syncAndSeed, models: { Character, Description } } = require('./db/index');
+const { syncAndSeed, models: { Character, Description, Companion} } = require('./db/index');
 const express = require('express');
 const app = express();
 const chalk = require('chalk')

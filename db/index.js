@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/lotr'); // connection to your db
-const { DataTypes: { STRING, UUID, UUIDV4 } } = Sequelize;
+const { DataTypes: { STRING, UUID, UUIDV4, BOOLEAN } } = Sequelize;
 
 // CREATE MODELS:
 const Character = conn.define('character', {
@@ -29,8 +29,22 @@ const Description = conn.define('description', {
     }
 })
 
-Character.hasOne(Description);
-Character.belongsTo(Character, { as: 'companion' });
+const Companion = conn.define('companion', {
+    inFellowship: {
+        type: BOOLEAN,
+        defaultValue: false
+    },
+    companionId: { 
+        type: UUID
+    }
+})
+
+// Character.hasOne(Description);
+Companion.belongsTo(Character);
+Companion.belongsTo(Description)
+Companion.belongsTo(Companion, {as: 'self'});
+Description.belongsTo(Character);
+Character.belongsTo(Character);
 // Character.hasMany(Character, { foreignKey: 'fellowship-members'}) 
 
 const data = {
@@ -53,6 +67,8 @@ const data = {
     ['A River Creature originally, much like a hobbit, Gollum has been totally transformed by his long, long ownership of the Ring of Power into a schizoid creature who has long conversations with himself. At least he has ONE friend. He follows Frodo in hopes of getting back "his Precious." Truly a creepy character.']]
 }
 
+// need to add something to display using the "sale" type of model from video...
+
 const syncAndSeed = async() => {
     await conn.sync({ force: true });
     const [gandalf, bilbo, frodo, sam, aragorn, boromir, legolas, gimli, merry, pippen, elrond, arwen, celeborn, galadriel, saruman, gollum] = await Promise.all(
@@ -61,6 +77,9 @@ const syncAndSeed = async() => {
     const [bio1, bio2, bio3, bio4, bio5, bio6, bio7, bio8, bio9, bio10, bio11, bio12, bio13, bio14, bio15, bio16] = await Promise.all(
         data.bio.map(bio => Description.create({ bio: bio.pop()}))
     )
+    const companions = await Promise.all([
+        Companion.create({characterId: gandalf.id, companionId: bilbo.id}) // NEED TO RECREATE ALL COMPANIONS
+    ])
     
     bio1.characterId = gandalf.id
     bio2.characterId = bilbo.id
@@ -97,9 +116,8 @@ const syncAndSeed = async() => {
     celeborn.companionId = galadriel.id
     galadriel.companionId = celeborn.id
 
-
     await Promise.all([
-        bio1.save(), bio2.save(), bio3.save(), bio4.save(), bio5.save(), bio6.save(), bio7.save(), bio8.save(), bio9.save(), bio10.save(), bio11.save(), bio12.save(), bio13.save(), bio14.save(), bio15.save(), bio16.save(), gandalf.save(), bilbo.save(), frodo.save(), sam.save(), aragorn.save(), arwen.save()
+        bio1.save(), bio2.save(), bio3.save(), bio4.save(), bio5.save(), bio6.save(), bio7.save(), bio8.save(), bio9.save(), bio10.save(), bio11.save(), bio12.save(), bio13.save(), bio14.save(), bio15.save(), bio16.save(), gandalf.save(), bilbo.save(), frodo.save(), sam.save(), aragorn.save(), arwen.save(), merry.save(), pippen.save(), legolas.save(), gimli.save(), celeborn.save(), galadriel.save()
     ])
 };
 
@@ -107,6 +125,7 @@ module.exports = {
     syncAndSeed,
     models: {
         Character,
-        Description
+        Description,
+        Companion
     }
 }

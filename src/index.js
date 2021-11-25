@@ -18,9 +18,7 @@ const renderCharacters = (characters) => {
 const renderDescriptions = (descriptions) => {
     const html = descriptions.map(desc => `
         <li>
-            <a href='#${desc.id}'>
             ${desc.name}
-            </a>
         </li>
     `).join('');
     descriptionList.innerHTML = html;
@@ -40,11 +38,11 @@ const init = async() => {
 
 window.addEventListener('hashchange', async() => {
     const characterId = window.location.hash.slice(1)
-    // const url = `/api/characters/${characterId}/bio`;
-    // const bios = (await axios(url)).data
+    const url = `/api/characters/${characterId}/bio`;
+    const bios = (await axios(url)).data
 
     // NEED TO SET UP DESCRIPTIONS LIKE SALES IN VIDEO!
-
+    console.log(bios)
 });
 
 init()
