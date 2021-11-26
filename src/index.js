@@ -1,11 +1,13 @@
 //this file is for the client side 
 import axios from 'axios';
 
-const characterList = document.querySelector('#char-list');
-const descriptionList = document.querySelector('#desc-list');
+const characterList = document.querySelector('#chars');
+const descriptionList = document.querySelector('#bios');
 
-const renderCharacters = (characters) => {
-    const html = characters.map(char => `
+let chars, bios;
+
+const renderCharacters = () => {
+    const html = chars.map(char => `
         <li>
             <a href='#${char.id}'>
             ${char.name}
@@ -15,34 +17,29 @@ const renderCharacters = (characters) => {
     characterList.innerHTML = html;
 }
 
-const renderDescriptions = (descriptions) => {
-    const html = descriptions.map(desc => `
+const renderDescriptions = () => {
+    const html = bios.map(bio => `
         <li>
-            ${desc.name}
+            ${bio.bio}
         </li>
     `).join('');
     descriptionList.innerHTML = html;
 }
 
-const init = async() => {
-    try {
-        const characters = (await axios.get('/api/characters')).data;
-        const descriptions = (await axios.get('/api/descriptions')).data;
-        renderCharacters(characters);
-        // renderDescriptions(descriptions);
-    }
-    catch(ex) {
-        console.log(ex)
-    }
+const fetchDescriptions = async() => {
+    const characterId = window.location.hash.slice(1)
+    bios = (await axios.get(`/api/characters/${characterId}/description`)).data
+    renderDescriptions()
 }
 
 window.addEventListener('hashchange', async() => {
-    const characterId = window.location.hash.slice(1)
-    const url = `/api/characters/${characterId}/bio`;
-    const bios = (await axios(url)).data
-
-    // NEED TO SET UP DESCRIPTIONS LIKE SALES IN VIDEO!
-    console.log(bios)
+    renderCharacters()
+    fetchDescriptions()
 });
+
+const init = async() => {
+    chars = (await axios.get('/api/characters')).data;
+    renderCharacters();
+};
 
 init()

@@ -1,0 +1,89 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-image: url("rivendell.jpeg");
+  padding: 1rem;
+}
+main {
+  display: flex;
+}
+main > * {
+  flex: 1
+}
+
+h2 {
+  padding: 1rem;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+header {
+  background-color: #3e480a;
+  color: #fff;
+  display: flex;
+  font-size: 22px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  height: 4rem;
+  opacity: 85%;
+}
+
+header > img {
+  margin-right: 15px;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  line-height: 2rem;
+}
+#chars{
+  font-weight: bold;
+  padding: 1rem;
+}
+
+#bios{
+  font-style: italic;
+  padding: 1rem;
+}
+
+.list {
+  background-color: #f6f6ef;
+  width: 50%;
+  margin: 12px auto;
+  padding-bottom: 25px;
+  opacity: 70%;
+}
+
+
+.char-item {
+  padding: 0 15px;
+  
+}
+
+.char-position {
+  color: #828282;
+}
+
+.char-info {
+  margin-left: 40px;
+}
+
+.error {
+  background-image: url("rivendell.jpeg");
+}
