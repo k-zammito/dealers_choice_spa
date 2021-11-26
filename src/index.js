@@ -8,7 +8,7 @@ let chars, bios;
 
 const renderCharacters = () => {
     const html = chars.map(char => `
-        <li>
+        <li class=''>
             <a href='#${char.id}'>
             ${char.name}
             </a>
@@ -19,6 +19,9 @@ const renderCharacters = () => {
 
 const renderDescriptions = () => {
     const html = bios.map(bio => `
+        <div>
+            <img src="lotr_${bio.photoId}.jpeg"/>
+        </div>
         <li>
             ${bio.bio}
         </li>
